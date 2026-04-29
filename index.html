@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecaDash</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="script.js">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Deca<span>Dash</span></div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showScreen('teacher')">Order</button>
+            <button class="nav-tab" onclick="showScreen('staff')">Staff</button>
+        </nav>
+        <button class="logout-btn" id="logout-btn" onclick="logout()">Sign out</button>
+    </header>
+
+    <main>
+
+        <!-- ===== TEACHER SCREEN ===== -->
+        <div id="teacher-screen">
+            <div class="screen-header">
+                <h1>Place Your Order</h1>
+                <p>Fill out your info, pick your items, and we'll deliver it to your room. Please don't refresh the page while your order is being processed.</p>
+            </div>
+
+            <!-- Status Tracker (shown after order) -->
+            <div class="status-tracker" id="status-tracker">
+                <div class="order-id-label">Your Order</div>
+                <div class="order-id-val" id="display-order-id">#DD-001</div>
+                <div class="progress-steps">
+                    <div class="step-bubble done" id="step1">✓</div>
+                    <div class="step-connector" id="conn1"></div>
+                    <div class="step-bubble active" id="step2">2</div>
+                    <div class="step-connector" id="conn2"></div>
+                    <div class="step-bubble" id="step3">3</div>
+                </div>
+                <div class="step-labels">
+                    <span class="step-label">Received</span>
+                    <span class="step-label" style="width:auto;flex:1;text-align:center;">In Progress</span>
+                    <span class="step-label">Ready</span>
+                </div>
+                <div class="status-msg" id="status-msg">
+                    <span>⏳</span> <span id="status-text">Your order is being prepared...</span>
+                </div>
+
+            </div>
+
+            <div class="two-col">
+                <!-- Left: Form -->
+                <div>
+                    <div class="card">
+                        <div class="card-title">Your Info</div>
+                        <div class="form-row">
+                            <div class="form-group" style="margin:0">
+                                <label>Your Name</label>
+                                <input type="text" id="teacher-name" placeholder="Ms. Johnson" />
+                            </div>
+                            <div class="form-group" style="margin:0">
+                                <label>Room Number</label>
+                                <input type="text" id="room-number" placeholder="Room 204" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <!-- Menu Board -->
+                        <div class="card-title">Menu</div> 
+
+                        <div class="menu-category">☕ Drinks</div>
+                        <!-- first drink -->
+                        <div class="menu-item" id="item-latte" onclick="toggleItem('latte')">
+                            <div class="menu-item-info">
+                                <div class="menu-item-name">Boba</div>
+                                <div class="menu-item-desc">Espresso + milk over ice</div>
+                            </div>
+                            <div class="menu-item-price">$5.00</div>
+                            <div class="qty-control">
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('latte',-1)">−</button>
+                                <span class="qty-num" id="qty-latte">0</span>
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('latte',1)">+</button>
+                            </div>
+                        </div>
+                        <!-- Second Drink -->
+                        <div class="menu-item" id="item-tea" onclick="toggleItem('tea')">
+                            <div class="menu-item-info">
+                                <div class="menu-item-name">Chai Tea</div>
+                                <div class="menu-item-desc">Spiced chai with steamed milk</div>
+                            </div>
+                            <div class="menu-item-price">$2.00</div>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="event.stopPropagation();changeQty('tea',-1)">−</button>
+                                <span class="qty-num" id="qty-tea">0</span>
+                                <button class="qty-btn" onclick="event.stopPropagation();changeQty('tea',1)">+</button>
+                            </div>
+                        </div>
+
+                        <!-- <div class="menu-category">🥐 Food</div>
+
+                        <div class="menu-item" id="item-croissant" onclick="toggleItem('croissant')">
+                            <div class="menu-item-info">
+                                <div class="menu-item-name">Butter Croissant</div>
+                                <div class="menu-item-desc">Flaky, fresh-baked</div>
+                            </div>
+                            <div class="menu-item-price">$2.50</div>
+                            <div class="qty-control">
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('croissant',-1)">−</button>
+                                <span class="qty-num" id="qty-croissant">0</span>
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('croissant',1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" id="item-muffin" onclick="toggleItem('muffin')">
+                            <div class="menu-item-info">
+                                <div class="menu-item-name">Blueberry Muffin</div>
+                                <div class="menu-item-desc">Baked fresh daily</div>
+                            </div>
+                            <div class="menu-item-price">$2.25</div>
+                            <div class="qty-control">
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('muffin',-1)">−</button>
+                                <span class="qty-num" id="qty-muffin">0</span>
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('muffin',1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" id="item-sandwich" onclick="toggleItem('sandwich')">
+                            <div class="menu-item-info">
+                                <div class="menu-item-name">Turkey Sandwich</div>
+                                <div class="menu-item-desc">Turkey, cheese, lettuce, on sourdough</div>
+                            </div>
+                            <div class="menu-item-price">$4.75</div>
+                            <div class="qty-control">
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('sandwich',-1)">−</button>
+                                <span class="qty-num" id="qty-sandwich">0</span>
+                                <button class="qty-btn"
+                                    onclick="event.stopPropagation();changeQty('sandwich',1)">+</button>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group" style="margin-top:1rem;">
+                            <label>Special Requests / Allergies</label>
+                            <textarea id="special-notes" placeholder="e.g. No ice, oat milk, No boba pearls extra hot..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div>
+                    <div class="card" style="position:sticky;top:80px;">
+                        <div class="card-title">Order Summary</div>
+
+                        <div id="cart-items">
+                            <div class="empty-cart">
+                                <div class="icon">🛒</div>
+                                Select items from the menu
+                            </div>
+                        </div>
+
+                        <div style="margin-top:1rem;padding-top:12px;border-top:1px solid var(--border);">
+                            <div class="summary-line">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <!-- <div class="summary-line">
+                                <span>Tax (%)</span>
+                                <span id="tax">$0.00</span>
+                            </div> -->
+                            <div class="summary-line total">
+                                <span>Total</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-top:1rem;" id="submit-btn" onclick="submitOrder()"
+                            disabled>
+                            Place Order
+                        </button>
+                        <p style="font-size:11px;color:var(--gray);text-align:center;margin-top:8px;">We'll deliver to
+                            your room when ready. Please dont refresh this page when you order is being processed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STAFF SCREEN ===== -->
+        <div id="staff-screen">
+            <!-- PIN Gate -->
+            <div class="pin-gate" id="pin-gate">
+                <div style="font-size:40px;margin-bottom:12px;">🔐</div>
+                <h2>Deca Dash Staff Access</h2>
+                <p>Enter your staff PIN to access the order dashboard.</p>
+                <input type="password" class="pin-input" id="pin-input" maxlength="4" placeholder="••••"
+                    oninput="checkPin()" />
+                <div class="pin-error" id="pin-error"></div>
+                <button class="btn btn-primary" onclick="checkPin()">Unlock Dashboard</button>
+            </div>
+
+            <!-- Staff Dashboard -->
+            <div id="staff-dashboard">
+                <div class="dashboard-header">
+                    <div>
+                        <h1 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:700;">Orders Queue <span
+                                class="badge-count" id="order-count">0</span></h1>
+                        <p style="font-size:13px;color:var(--gray);margin-top:2px;">Tap actions to update order status
+                        </p>
+                    </div>
+                    <button class="btn btn-outline" style="width:auto;padding:8px 16px;font-size:13px;"
+                        onclick="lockDashboard()">Lock</button>
+                </div>
+                <div class="orders-grid" id="orders-grid">
+                    <div class="empty-state">No orders yet! Teachers will appear here when they place orders.</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
